@@ -1,0 +1,13 @@
+declare AKKA_HOME="$(cd "$(cd "$(dirname "$0")"; pwd -P)"/..; pwd)"
+declare FLEX_PRINT_DBGMSG=YES
+
+[ -n "$JAVA_OPTS" ] || JAVA_OPTS="-server -Xms1g -Xmx3g -XX:MaxPermSize=256m -Xss1m -XX:+UseParNewGC -XX:NewRatio=3 -XX:+UseCompressedOops "
+
+#JAVA_OPTS="$JAVA_OPTS -agentpath:/usr/lib64/libjprofilerti.so=port=8849,nowait"
+
+#JAVA_OPTS="$JAVA_OPTS -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8787,suspend=n"
+
+[ -n "$AKKA_CLASSPATH" ] || AKKA_CLASSPATH="$AKKA_HOME/lib/scala-library.jar:$AKKA_HOME/config:$AKKA_HOME/lib/*"
+
+echo "ClassPath: $AKKA_CLASSPATH"
+java $JAVA_OPTS -cp "$AKKA_CLASSPATH" -Djava.library.path="../sharedlib" -Dakka.home="$AKKA_HOME" -Dakka.kernel.quiet=$quiet akka.kernel.Main com.sjr.entropy.core.server.EntropyServerKernel
