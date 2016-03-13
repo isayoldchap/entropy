@@ -107,7 +107,6 @@ class Grid[T](val cols: Int = 5, val rows: Int = 5) {
     (1 to rows).map(rowContents).foreach { row =>
       row.foreach { cell =>
         boardRepresentation.append(cell.map(_.toString).getOrElse("."))
-
       }
       boardRepresentation.append(s" $index")
       boardRepresentation.append("\n")
