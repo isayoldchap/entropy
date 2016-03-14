@@ -1,4 +1,4 @@
-package com.sjr.entropy.core.server
+package com.sjr.entropy.server
 
 import akka.actor.Actor
 import scala.concurrent.ExecutionContext

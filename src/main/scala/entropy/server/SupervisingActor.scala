@@ -1,6 +1,6 @@
-package com.sjr.entropy.core.server
+package com.sjr.entropy.server
 
-import akka.actor.SupervisorStrategy.{Escalate, Restart}
+import akka.actor.SupervisorStrategy.Restart
 import akka.actor._
 
 import scala.concurrent.duration._

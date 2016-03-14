@@ -1,4 +1,4 @@
-package com.sjr.entropy.core.server
+package com.sjr.entropy.server
 
 /**
  * Created by stevenrichardson on 2/1/15.
