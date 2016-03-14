@@ -44,12 +44,12 @@
         <dependency>
             <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-actor_2.11</artifactId>
-            <version>2.4-SNAPSHOT</version>
+            <version>2.3.8</version>
         </dependency>
         <dependency>
             <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-kernel_2.11</artifactId>
-            <version>2.4-SNAPSHOT</version>
+            <version>2.3.8</version>
         </dependency>
         <dependency>
             <groupId>com.typesafe.akka</groupId>

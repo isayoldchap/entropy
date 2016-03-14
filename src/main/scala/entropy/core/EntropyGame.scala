@@ -51,7 +51,7 @@ class EntropyGame(uniqueGameTiles: Set[GameTile]) {
     case orderMove: OrderMove if currentRole == Order => playOrderMove(orderMove)
     case PassMove if currentRole == Order => skipOrderMove()
     case chaosMove: ChaosMove if currentRole == Chaos => playChaosMove(chaosMove)
-    case _ => IllegalMove(s"It is currently ${currentRole}'s turn")
+    case _ => IllegalMoveResult(s"It is currently ${currentRole}'s turn")
   }
   def randomLegalChaosMove: ChaosMove = ChaosMove(legalChaosMoves(random.nextInt(legalChaosMoves.size)))
 
@@ -70,7 +70,7 @@ class EntropyGame(uniqueGameTiles: Set[GameTile]) {
   private def skipOrderMove(): MoveResult = {
     drawNextTile()
     switchRole()
-    LegalMove
+    ValidMoveResult
   }
 
   private def playOrderMove(orderMove: OrderMove): MoveResult = {
@@ -78,8 +78,8 @@ class EntropyGame(uniqueGameTiles: Set[GameTile]) {
       board.movePiece(orderMove.source, orderMove.destination)
       drawNextTile()
       switchRole()
-      LegalMove
-    } else IllegalMove(s"Order Move ${orderMove} was invalid")
+      ValidMoveResult
+    } else IllegalMoveResult(s"Order Move ${orderMove} was invalid")
   }
 
   private def playChaosMove(chaosMove: ChaosMove): MoveResult = {
@@ -87,8 +87,8 @@ class EntropyGame(uniqueGameTiles: Set[GameTile]) {
       board.placePiece(chaosMove.placement, currentPiece.get)
       nextTile = None
       switchRole()
-      LegalMove
-    } else IllegalMove(s"Chaos Move ${chaosMove} was invalid")
+      ValidMoveResult
+    } else IllegalMoveResult(s"Chaos Move ${chaosMove} was invalid")
 
   }
 

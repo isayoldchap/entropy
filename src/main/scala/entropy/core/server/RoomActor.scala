@@ -7,7 +7,6 @@ import akka.actor.Actor
  */
 class RoomActor extends Actor {
   override def receive: Receive = {
-    case _ => // handle join
     case _ => // handle leave room
   }
 }

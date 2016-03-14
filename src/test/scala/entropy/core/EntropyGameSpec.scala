@@ -20,13 +20,13 @@ class EntropyGameSpec extends FunSpec with Matchers {
     it("Should enforce legal moves") {
       val entropyGame = EntropyGame(EntropyStyle.Normal)
       val validChaosMove = entropyGame.playMove(ChaosMove(Point(1, 1)))
-      validChaosMove shouldBe LegalMove
+      validChaosMove shouldBe ValidMoveResult
 
       val illegalMove = entropyGame.playMove(ChaosMove(Point(1, 1)))
-      illegalMove.getClass shouldBe classOf[IllegalMove]
+      illegalMove.getClass shouldBe classOf[IllegalMoveResult]
 
       val validOrderMove = entropyGame.playMove(OrderMove(Point(1, 1), Point(1, 5)))
-      validOrderMove shouldBe LegalMove
+      validOrderMove shouldBe ValidMoveResult
     }
 
     it("A normal entropy game should have 25 rounds") {

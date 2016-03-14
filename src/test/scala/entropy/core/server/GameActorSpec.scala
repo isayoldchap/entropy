@@ -20,12 +20,12 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
   "A game actor" must {
     "accept entropy moves" in {
       val game = system.actorOf(Props[GameActor])
-      game ! ChaosMove(Point(3,3))
-      expectMsg(LegalMove)
-      game ! ChaosMove(Point(3,3))
-      expectMsgClass(classOf[IllegalMove])
-      game ! OrderMove(Point(3,3), Point(4,3))
-      expectMsg(LegalMove)
+      game ! ChaosMove(Point(3, 3))
+      expectMsg(ValidMoveResult)
+      game ! ChaosMove(Point(3, 3))
+      expectMsgClass(classOf[IllegalMoveResult])
+      game ! OrderMove(Point(3, 3), Point(4, 3))
+      expectMsg(ValidMoveResult)
     }
   }
 }

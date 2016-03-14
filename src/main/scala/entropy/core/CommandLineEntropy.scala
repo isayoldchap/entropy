@@ -19,9 +19,9 @@ object CommandLineEntropy extends App {
     command.toUpperCase match {
       case "PASS" =>
         game.playMove(PassMove)  match {
-          case LegalMove =>
+          case ValidMoveResult =>
             doComputerTurn()
-          case IllegalMove(x) =>
+          case IllegalMoveResult(x) =>
             println("Attempted Move was illegal")
         }
       case ChaosMoveRegex(x, y) =>
@@ -30,9 +30,9 @@ object CommandLineEntropy extends App {
       case OrderMoveRegex(x1, y1, x2, y2) =>
         println(s"Order move was $x1$y1-$x2$y2")
         game.playMove(OrderMove(makePoint(x1,y1),makePoint(x2,y2))) match {
-          case LegalMove =>
+          case ValidMoveResult =>
             doComputerTurn()
-          case IllegalMove(x) =>
+          case IllegalMoveResult(x) =>
             println("Attempted Move was illegal")
         }
 

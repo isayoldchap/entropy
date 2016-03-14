@@ -14,17 +14,17 @@ object Grid extends App {
 }
 
 class Grid[T](val cols: Int = 5, val rows: Int = 5) {
-  type optionOfT = Option[T]
-
-
-  private val cells: ArrayBuffer[optionOfT] = new ArrayBuffer(cols * rows)
+  type Cell = Op[T]
+  type GridSegment = Seq[Cell]
+  private val emptyCell: Cell = None
+  private val cells: ArrayBuffer[Cell] = new ArrayBuffer(cols * rows)
   initBoard()
 
-  def allColumnContents: Seq[Seq[optionOfT]] = (1 to cols).map(columnContents)
+  def allColumnContents: Seq[GridSegment] = (1 to cols).map(columnContents)
 
-  def allRowContents: Seq[Seq[optionOfT]] = (1 to rows).map(rowContents)
+  def allRowContents: Seq[GridSegment] = (1 to rows).map(rowContents)
 
-  def initBoard(): Unit = (0 until cols * rows).foreach(cells.insert(_, None))
+  def initBoard(): Unit = (0 until cols * rows).foreach(cells.insert(_, emptyCell))
 
   def movePiece(source: Point, destination: Point): Option[T] =
     get(source).map { tile =>
@@ -34,34 +34,34 @@ class Grid[T](val cols: Int = 5, val rows: Int = 5) {
     }
 
   def clear(): Unit = (0 until cells.size).foreach {
-    cells.update(_, None)
+    cells.update(_, emptyCell)
   }
 
   def clear(point: Point): Unit = {
     assertCellWithinBounds(point)
-    cells.update(cellIndex(point), None)
+    cells.update(indexOfCell(point), emptyCell)
   }
 
   def put(point: Point, value: T): Unit = {
     assertCellWithinBounds(point)
-    cells.update(cellIndex(point), Some(value))
+    cells.update(indexOfCell(point), Some(value))
   }
 
-  def get(point: Point): optionOfT = {
+  def get(point: Point): Cell = {
     assertCellWithinBounds(point)
     valueAt(point)
   }
 
-  def rowContents(row: Int): Seq[optionOfT] = {
+  def rowContents(row: Int): GridSegment = {
     assert(rowsRange.contains(row))
-    (1 to cols).foldLeft[Seq[optionOfT]](Seq.empty)((contents, col) => {
+    (1 to cols).foldLeft[GridSegment](Seq.empty)((contents, col) => {
       contents :+ valueAt(Point(col, row))
     })
   }
 
-  def columnContents(col: Int): Seq[optionOfT] = {
+  def columnContents(col: Int): GridSegment = {
     assert(columnRange.contains(col))
-    (1 to rows).foldLeft[Seq[optionOfT]](Seq.empty)((contents, row) => {
+    (1 to rows).foldLeft[GridSegment](Seq.empty)((contents, row) => {
       contents :+ valueAt(Point(col, row))
     })
   }
@@ -70,7 +70,7 @@ class Grid[T](val cols: Int = 5, val rows: Int = 5) {
 
   def isVacantAt(point: Point): Boolean = valueAt(point).isEmpty
 
-  def valueAt(point: Point): optionOfT = cells(cellIndex(point))
+  def valueAt(point: Point): Cell = cells(indexOfCell(point))
 
   def containsCell(point: Point): Boolean = columnRange.contains(point.x) && rowsRange.contains(point.y)
 
@@ -96,7 +96,7 @@ class Grid[T](val cols: Int = 5, val rows: Int = 5) {
     Point(colIndex, rowIndex)
   }
 
-  private def cellIndex(point: Point): Int = {
+  private def indexOfCell(point: Point): Int = {
     val index: Int = (point.x + (point.y - 1) * cols) - 1
     index
   }

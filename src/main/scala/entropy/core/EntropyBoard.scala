@@ -22,7 +22,7 @@ class EntropyBoard(private val grid: Grid[GameTile]) {
   def movePiece(source: Point, destination: Point) = {
     if (allPossibleOrderMoves.contains(OrderMove(source, destination))) {
       grid.movePiece(source, destination)
-    } else IllegalMove(s"Moving from $source to $destination was not a legal move")
+    } else IllegalMoveResult(s"Moving from $source to $destination was not a legal move")
   }
 
   def placePiece(point: Point, gameTile: GameTile) = grid.put(point, gameTile)

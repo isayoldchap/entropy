@@ -1,5 +1,7 @@
 package com.sjr.entropy
 
+import scala.concurrent.Future
+
 /**
  * Created by stevenrichardson on 1/18/15.
  */
@@ -12,15 +14,25 @@ package object core {
   val F = 6
   val G = 7
 
+  sealed trait Role
+
+  type Op[T] = Option[T]
+
+  type Fu[T] = Future[T]
+
+  object Order extends Role
+
+  object Chaos extends Role
+
   type Move = (Point, Point) //from, to
 
   implicit def extendedString(s: String) = new StringExt(s)
 
   sealed trait MoveResult
 
-  object LegalMove extends MoveResult
+  object ValidMoveResult extends MoveResult
 
-  case class IllegalMove(description: String) extends MoveResult
+  case class IllegalMoveResult(description: String) extends MoveResult
 
   sealed trait EntropyMove
 
@@ -29,12 +41,6 @@ package object core {
   case object PassMove extends EntropyMove
 
   case class ChaosMove(placement: Point) extends EntropyMove
-
-  trait Role
-
-  object Order extends Role
-
-  object Chaos extends Role
 
 
   import com.sjr.entropy.core.GameTile._

@@ -28,6 +28,6 @@ object EntropyServerSystem {
   }
 
   def stop(): Unit = {
-    if (system != null) system.terminate()
+    if (system != null) system.awaitTermination()
   }
 }
