@@ -13,29 +13,29 @@ object Grid extends App {
   def apply[T](width: Int, height: Int): Grid[T] = new Grid[T](width, height)
 }
 
+// should grid be immutable? Each move could produce a new grid - more functional style
 class Grid[T](val cols: Int = 5, val rows: Int = 5) {
   type Cell = Op[T]
   type GridSegment = Seq[Cell]
+  private val cellCount = rows * cols
   private val emptyCell: Cell = None
-  private val cells: ArrayBuffer[Cell] = new ArrayBuffer(cols * rows)
+  private val cells: ArrayBuffer[Cell] = new ArrayBuffer(cellCount)
   initBoard()
 
   def allColumnContents: Seq[GridSegment] = (1 to cols).map(columnContents)
 
   def allRowContents: Seq[GridSegment] = (1 to rows).map(rowContents)
 
-  def initBoard(): Unit = (0 until cols * rows).foreach(cells.insert(_, emptyCell))
+  def initBoard(): Unit = (0 until cellCount).foreach(cells.insert(_, emptyCell))
 
-  def movePiece(source: Point, destination: Point): Option[T] =
+  def movePiece(source: Point, destination: Point): Cell =
     get(source).map { tile =>
       clear(source)
       put(destination, tile)
       tile
     }
 
-  def clear(): Unit = (0 until cells.size).foreach {
-    cells.update(_, emptyCell)
-  }
+  def clear(): Unit = (0 until cells.size).foreach { cells.update(_, emptyCell) }
 
   def clear(point: Point): Unit = {
     assertCellWithinBounds(point)

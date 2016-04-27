@@ -10,22 +10,19 @@ object EntropyBoard {
 
 class EntropyBoard(private val grid: Grid[GameTile]) {
 
+  type EntropySegment = Seq[Op[GameTile]]
+
   def clear() = grid.clear()
 
-  def allPatterns: Seq[String] = {
-    val allSegments: Seq[Seq[Option[GameTile]]] = grid.allColumnContents ++ grid.allRowContents
-    allSegments.map(boardSegmentToPattern)
-  }
+  def allPatterns: Seq[String] = allSegments.map(boardSegmentToPattern)
 
-  private def boardSegmentToPattern(segment: Seq[Option[GameTile]]): String = segment.map(_.getOrElse(" ")).mkString
-
-  def movePiece(source: Point, destination: Point) = {
+  def movePiece(source: Point, destination: Point): Unit = {
     if (allPossibleOrderMoves.contains(OrderMove(source, destination))) {
       grid.movePiece(source, destination)
     } else IllegalMoveResult(s"Moving from $source to $destination was not a legal move")
   }
 
-  def placePiece(point: Point, gameTile: GameTile) = grid.put(point, gameTile)
+  def placePiece(point: Point, gameTile: GameTile): Unit = grid.put(point, gameTile)
 
   def isEmpty: Boolean = grid.isEmpty
 
@@ -33,11 +30,9 @@ class EntropyBoard(private val grid: Grid[GameTile]) {
 
   def allPossibleChaosMoves: Seq[Point] = vacantSquares
 
-  def allMovesFromSource(source: Point): Seq[EntropyMove] = legalMovesFromSource(source)
+  def allMovesFromSource(source: Point): Seq[OrderMove] = legalMovesFromSource(source)
 
-  def allLegalDestinationsFromSource(source: Point): Seq[Point] = allPossibleOrderMoves.map {
-    case OrderMove(source, destination) => destination
-  }
+  def allLegalDestinationsFromSource(source: Point): Seq[Point] = allMovesFromSource(source).map(_.destination)
 
   def allPossibleOrderMoves: Seq[OrderMove] = {
     grid.occupiedSquares.foldLeft(Seq.empty[OrderMove])((moves, sourcePoint) => {
@@ -46,6 +41,10 @@ class EntropyBoard(private val grid: Grid[GameTile]) {
   }
 
   override def toString: String = grid.toString
+
+  private def allSegments: Seq[EntropySegment] = grid.allColumnContents ++ grid.allRowContents
+
+  private def boardSegmentToPattern(segment: EntropySegment): String = segment.map(_.getOrElse(" ")).mkString
 
   private def legalMovesFromSource(source: Point): Seq[OrderMove] = {
     Directions.orthogonal.foldLeft(Seq.empty[OrderMove])((moves, direction) => {

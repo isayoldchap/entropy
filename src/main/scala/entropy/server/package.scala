@@ -1,6 +1,6 @@
 package com.sjr.entropy.server
 
-import com.sjr.entropy.core.PackageObject
+import entropy.PackageObject
 
 /**
  * This software copyright FlexTrade, Inc.

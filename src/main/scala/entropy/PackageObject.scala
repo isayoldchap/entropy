@@ -1,4 +1,6 @@
-package com.sjr.entropy.core
+package entropy
+
+import com.sjr.entropy.core.{GameTile, Point, StringExt}
 
 import scala.concurrent.Future
 
@@ -19,15 +21,21 @@ trait PackageObject {
   val F = 6
   val G = 7
 
-  sealed trait Role
+  sealed trait Role {
+    def alternate: Role
+  }
 
   type Op[T] = Option[T]
 
   type Fu[T] = Future[T]
 
-  object Order extends Role
+  object Order extends Role {
+    override def alternate: Role = Chaos
+  }
 
-  object Chaos extends Role
+  object Chaos extends Role {
+    override def alternate: Role = Order
+  }
 
   type Move = (Point, Point) //from, to
 

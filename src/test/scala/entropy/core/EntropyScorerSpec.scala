@@ -9,6 +9,10 @@ import org.scalatest.{FunSpec, Matchers}
 class EntropyScorerSpec extends FunSpec with Matchers {
   describe("An entropy scorer" ){
     describe("Single pattern scoring") {
+      it ("should handle really long palindromes") {
+        (new EntropyScorer().scoreSinglePattern("X" * 100000000) > 0) shouldBe true
+      }
+
       it("Should score single patterns based on their length if they are a palindrome") {
         new EntropyScorer().scoreSinglePattern("XOXOY") shouldBe 0
         new EntropyScorer().scoreSinglePattern("XOXOX") shouldBe 5

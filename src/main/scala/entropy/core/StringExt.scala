@@ -10,6 +10,14 @@ class StringExt(string: String) {
     else string.substring(0, string.length - 1)
   }
 
-  def isPalindrome: Boolean = string.reverse == string // optimize later
-
+  def isPalindrome: Boolean = {
+    val chars = string.toCharArray
+    var frontIndex = 0
+    var lastIndex = chars.indices.last
+    while (frontIndex < lastIndex && chars(frontIndex) == chars(lastIndex)){
+      frontIndex += 1
+      lastIndex -= 1
+    }
+    lastIndex <= frontIndex
+  }
 }

@@ -24,7 +24,7 @@ class EntropyGame(uniqueGameTiles: Set[GameTile]) {
   assert(uniqueGameTiles.size > 3)
 
   val random = new Random
-  val board = new EntropyBoard(Grid[GameTile](uniqueGameTiles.size))
+  val board = EntropyBoard(uniqueGameTiles.size)
   val bag = setupBag(uniqueGameTiles)
 
   private var currentRole: Role = Chaos
@@ -55,7 +55,7 @@ class EntropyGame(uniqueGameTiles: Set[GameTile]) {
   }
   def randomLegalChaosMove: ChaosMove = ChaosMove(legalChaosMoves(random.nextInt(legalChaosMoves.size)))
 
-  def legalOrderMoves: Seq[EntropyMove] = if (currentRole == Order) board.allPossibleOrderMoves else Seq.empty
+  def legalOrderMoves: Seq[OrderMove] = if (currentRole == Order) board.allPossibleOrderMoves else Seq.empty
 
   def legalChaosMoves: Seq[Point] = if (currentRole == Chaos) board.allPossibleChaosMoves else Seq.empty
 
@@ -94,7 +94,7 @@ class EntropyGame(uniqueGameTiles: Set[GameTile]) {
 
   private def drawNextTile(): Unit = nextTile = bag.takeNext()
 
-  private def switchRole(): Unit = currentRole = if (currentRole == Order) Chaos else Order
+  private def switchRole(): Unit = currentRole = currentRole.alternate
 
   private def setupBag(uniqueGameTiles: Set[GameTile]): Bag[GameTile] = {
     val bag = Bag[GameTile]()
