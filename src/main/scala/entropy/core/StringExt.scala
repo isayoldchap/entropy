@@ -5,10 +5,7 @@ package com.sjr.entropy.core
  */
 class StringExt(string: String) {
 
-  def front: String = {
-    if (string.isEmpty) ""
-    else string.substring(0, string.length - 1)
-  }
+  def front: String = string.dropRight(1)
 
   def isPalindrome: Boolean = {
     val chars = string.toCharArray

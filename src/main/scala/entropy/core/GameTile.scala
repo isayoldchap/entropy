@@ -5,13 +5,13 @@ package com.sjr.entropy.core
  */
 
 object Color {
-  val Red = Color("Red")
-  val Blue = Color("Blue")
-  val Yellow = Color("Yellow")
-  val Green = Color("Green")
-  val White = Color("White")
-  val Orange = Color("Orange")
-  val Silver = Color("Silver")
+  val Red = Color("!Red")
+  val Blue = Color("@Blue")
+  val Yellow = Color("#Yellow")
+  val Green = Color("$Green")
+  val White = Color("%White")
+  val Orange = Color("^Orange")
+  val Silver = Color("&B1Silver")
 }
 
 case class Color(description:String)

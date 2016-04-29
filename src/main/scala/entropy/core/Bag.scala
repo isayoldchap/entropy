@@ -19,7 +19,7 @@ class Bag[T](initialContents: Seq[T]) {
 
   def takeNext(): Option[T] = synchronized {
     val item = contents.lastOption
-    if (item.isDefined) contents = contents.dropRight(1)
+    item.foreach(_ => contents = contents.dropRight(1))
     item
   }
 
