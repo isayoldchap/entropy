@@ -1,8 +1,10 @@
-package com.sjr.entropy.core
+package com.sjr.entropy.core.game
 
 /**
  * Created by stevenrichardson on 3/31/14.
  */
+
+import com.sjr.entropy.core._
 
 import scala.util.Random
 
@@ -47,8 +49,6 @@ class EntropyGame(uniqueGameTiles: Set[GameTile]) {
 
   def isEmpty: Boolean = board.isEmpty
 
-  def playMove(move: EntropyMove): MoveResult = currentRole.playMove(this, move)
-
   def randomLegalChaosMove: ChaosMove = ChaosMove(legalChaosMoves(random.nextInt(legalChaosMoves.size)))
 
   def legalOrderMoves: Seq[OrderMove] = if (currentRole == Order) board.allPossibleOrderMoves else Seq.empty
@@ -62,13 +62,15 @@ class EntropyGame(uniqueGameTiles: Set[GameTile]) {
     println(board.toString)
   }
 
-  def skipOrderMove(): MoveResult = {
+  def playMove(move: EntropyMove): MoveResult = currentRole.playMove(this, move)
+
+  private[game] def playPassMove(): MoveResult = {
     drawNextTile()
     switchRole()
     ValidMoveResult
   }
 
-  def playOrderMove(orderMove: OrderMove): MoveResult = {
+  private[game] def playOrderMove(orderMove: OrderMove): MoveResult = {
     if (legalOrderMoves.contains(orderMove)) {
       board.movePiece(orderMove.source, orderMove.destination)
       drawNextTile()
@@ -77,9 +79,9 @@ class EntropyGame(uniqueGameTiles: Set[GameTile]) {
     } else IllegalMoveResult(s"Order Move ${orderMove} was invalid")
   }
 
-  def playChaosMove(chaosMove: ChaosMove): MoveResult = {
-    if (legalChaosMoves.contains(chaosMove.placement)) {
-      board.placePiece(chaosMove.placement, currentPiece.get)
+  private[game] def playChaosMove(chaosMove: ChaosMove): MoveResult = {
+    if (legalChaosMoves.contains(chaosMove.location)) {
+      board.placePiece(chaosMove.location, currentPiece.get)
       nextTile = None
       switchRole()
       ValidMoveResult

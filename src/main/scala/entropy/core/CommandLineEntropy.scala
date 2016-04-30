@@ -1,5 +1,7 @@
 package com.sjr.entropy.core
 
+import com.sjr.entropy.core.game._
+
 /**
  * Created by stevenrichardson on 1/24/15.
  */

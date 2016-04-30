@@ -1,4 +1,6 @@
-package com.sjr.entropy.core
+package com.sjr.entropy.core.game
+
+import com.sjr.entropy.core._
 
 /**
  * Created by stevenrichardson on 4/4/14.

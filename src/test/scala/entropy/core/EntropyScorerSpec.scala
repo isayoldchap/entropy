@@ -1,5 +1,6 @@
 package com.sjr.entropy.core
 
+import com.sjr.entropy.core.game.EntropyBoard
 import org.scalatest.{FunSpec, Matchers}
 
 /**

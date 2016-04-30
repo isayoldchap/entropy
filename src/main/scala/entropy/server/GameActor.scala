@@ -1,7 +1,7 @@
 package com.sjr.entropy.server
 
 import akka.actor.Actor
-import com.sjr.entropy.core.{EntropyGame, EntropyMove, EntropyStyle}
+import com.sjr.entropy.core.game.{EntropyGame, EntropyMove, EntropyStyle}
 
 /**
  * Created by stevenrichardson on 2/7/15.

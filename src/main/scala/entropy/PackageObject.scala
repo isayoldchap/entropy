@@ -1,6 +1,6 @@
 package com.sjr.entropy
 
-import com.sjr.entropy.core.{EntropyGame, GameTile, Point, StringExt}
+import com.sjr.entropy.core._
 
 import scala.concurrent.Future
 
@@ -25,7 +25,7 @@ trait PackageObject {
 
   type Fu[T] = Future[T]
 
-  type Move = (Point, Point) //from, to
+//  type Move = (Point, Point) //from, to
 
   implicit def extendedString(s: String) = new StringExt(s)
 
@@ -35,13 +35,7 @@ trait PackageObject {
 
   case class IllegalMoveResult(description: String) extends MoveResult
 
-  sealed trait EntropyMove
 
-  case class OrderMove(source: Point, destination: Point) extends EntropyMove
-
-  case object PassMove extends EntropyMove
-
-  case class ChaosMove(placement: Point) extends EntropyMove
 
   import com.sjr.entropy.core.GameTile._
 

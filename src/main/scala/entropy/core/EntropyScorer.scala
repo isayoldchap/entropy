@@ -1,5 +1,8 @@
 package com.sjr.entropy.core
 
+import com.sjr.entropy.core.game.EntropyBoard
+
+
 /**
  * Created by stevenrichardson on 1/23/15.
  */
