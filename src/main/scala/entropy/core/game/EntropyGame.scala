@@ -49,7 +49,13 @@ class EntropyGame(uniqueGameTiles: Set[GameTile]) {
 
   def isEmpty: Boolean = board.isEmpty
 
-  def randomLegalChaosMove: ChaosMove = ChaosMove(legalChaosMoves(random.nextInt(legalChaosMoves.size)))
+  def playRandomMove(): MoveResult = playMove(randomMove)
+
+  def randomMove: EntropyMove = currentRole.randomMove(this)
+
+  def randomOrderMove: OrderMove = legalOrderMoves(random.nextInt(legalOrderMoves.size))
+
+  def randomChaosMove: ChaosMove = ChaosMove(legalChaosMoves(random.nextInt(legalChaosMoves.size)))
 
   def legalOrderMoves: Seq[OrderMove] = if (currentRole == Order) board.allPossibleOrderMoves else Seq.empty
 
