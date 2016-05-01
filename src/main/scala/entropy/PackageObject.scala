@@ -28,6 +28,7 @@ trait PackageObject {
 //  type Move = (Point, Point) //from, to
 
   implicit def extendedString(s: String) = new StringExt(s)
+  implicit def extendedBoolean(b: Boolean) = new BooleanExt(b)
 
   sealed trait MoveResult
 

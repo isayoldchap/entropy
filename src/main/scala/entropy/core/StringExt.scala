@@ -18,3 +18,7 @@ class StringExt(string: String) {
     lastIndex <= frontIndex
   }
 }
+
+class BooleanExt(bool: Boolean) {
+  def toOption: Option[Boolean] = if (bool) Some(true) else None
+}

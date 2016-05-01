@@ -56,13 +56,12 @@ class EntropyGame(uniqueGameTiles: Set[GameTile]) {
 
   def randomOrderMove: Op[OrderMove] = {
     val allOrderMoves = legalOrderMoves
-    if (allOrderMoves.nonEmpty) Some(legalOrderMoves(random.nextInt(legalOrderMoves.size))) else None
+    allOrderMoves.nonEmpty.toOption.map(_ => allOrderMoves(random.nextInt(allOrderMoves.size)))
   }
 
   def randomChaosMove: Op[ChaosMove] = {
     val allChaosMoves = legalChaosMoves
-    if (allChaosMoves.nonEmpty) Some(ChaosMove(legalChaosMoves(random.nextInt(legalChaosMoves.size))))
-    else None
+    allChaosMoves.nonEmpty.toOption.map(_ => ChaosMove(allChaosMoves(random.nextInt(allChaosMoves.size))))
   }
 
   def legalOrderMoves: Seq[OrderMove] = if (currentRole == Order) board.allPossibleOrderMoves else Seq.empty
