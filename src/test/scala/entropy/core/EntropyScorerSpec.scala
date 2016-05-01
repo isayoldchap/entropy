@@ -8,31 +8,36 @@ import org.scalatest.{FunSpec, Matchers}
  */
 
 class EntropyScorerSpec extends FunSpec with Matchers {
+
+  private def scoreSinglePattern(pattern: String): Int = new EntropyScorer().scoreSinglePattern(pattern)
+
+  private def scoreCombination(pattern: String): Int = new EntropyScorer().scoreCombination(pattern)
+
   describe("An entropy scorer" ){
     describe("Single pattern scoring") {
       it ("should handle really long palindromes") {
-        (new EntropyScorer().scoreSinglePattern("X" * 100000000) > 0) shouldBe true
+        (scoreSinglePattern("X" * 100000000) > 0) shouldBe true
       }
 
       it("Should score single patterns based on their length if they are a palindrome") {
-        new EntropyScorer().scoreSinglePattern("XOXOY") shouldBe 0
-        new EntropyScorer().scoreSinglePattern("XOXOX") shouldBe 5
+        scoreSinglePattern("XOXOY") shouldBe 0
+        scoreSinglePattern("XOXOX") shouldBe 5
 
       }
 
       it("Should consider two to be the shortest scoring palindrome") {
-        new EntropyScorer().scoreSinglePattern("XX") shouldBe 2
-        new EntropyScorer().scoreSinglePattern("X") shouldBe 0
+        scoreSinglePattern("XX") shouldBe 2
+        scoreSinglePattern("X") shouldBe 0
       }
     }
 
     describe("Combination scoring") {
       it("Should find multiple scoring patterns inside a larger pattern") {
-        new EntropyScorer().scoreCombination("XXXXX") shouldBe 30
-        new EntropyScorer().scoreCombination("XXXX") shouldBe 16
-        new EntropyScorer().scoreCombination("XXX") shouldBe 7
-        new EntropyScorer().scoreCombination("YXXY") shouldBe 6
-        new EntropyScorer().scoreCombination(" XXX ") shouldBe 7
+        scoreCombination("XXXXX") shouldBe 30
+        scoreCombination("XXXX") shouldBe 16
+        scoreCombination("XXX") shouldBe 7
+        scoreCombination("YXXY") shouldBe 6
+        scoreCombination(" XXX ") shouldBe 7
 
       }
     }
