@@ -43,7 +43,7 @@ class EntropyGame(uniqueGameTiles: Set[GameTile]) {
 
   def score: Int = new EntropyScorer().score(board)
 
-  def currentPiece:Option[GameTile] = nextTile
+  def nextGameTile:Option[GameTile] = nextTile
 
   def isFull: Boolean = board.isFull
 
@@ -87,12 +87,11 @@ class EntropyGame(uniqueGameTiles: Set[GameTile]) {
 
   private[game] def playChaosMove(chaosMove: ChaosMove): MoveResult = {
     if (legalChaosMoves.contains(chaosMove.location)) {
-      board.placePiece(chaosMove.location, currentPiece.get)
+      board.placePiece(chaosMove.location, nextGameTile.get)
       nextTile = None
       switchRole()
       ValidMoveResult
     } else IllegalMoveResult(s"Chaos Move ${chaosMove} was invalid")
-
   }
 
   private def drawNextTile(): Unit = nextTile = bag.takeNext()

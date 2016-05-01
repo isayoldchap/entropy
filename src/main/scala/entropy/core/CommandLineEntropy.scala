@@ -7,8 +7,8 @@ import com.sjr.entropy.core.game._
  */
 
 object CommandLineEntropy extends App {
-  val letterMappings = Seq("A", "B", "C", "D", "E", "F", "G").zipWithIndex.map {
-    case (letter, index) => (letter, index + 1)
+  val letterMappings = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray.zipWithIndex.map {
+    case (letter, index) => (letter.toString, index + 1)
   }.toMap
 
   val ChaosMoveRegex = """([A-E])([1-5])""".r
@@ -21,7 +21,9 @@ object CommandLineEntropy extends App {
   for (command <- io.Source.stdin.getLines) {
     commandToMove(command) match {
       case Some(move) => game.playMove(move) match {
-        case ValidMoveResult => doComputerTurn()
+        case ValidMoveResult =>
+          game.displayBoard
+          doComputerTurn()
         case IllegalMoveResult(reason) => println(s"Attempted Move $move was illegal")
       }
       case None => println(s"Invalid command $command")
@@ -43,8 +45,7 @@ object CommandLineEntropy extends App {
     }
 
   private def doComputerTurn() {
-    game.displayBoard
-    game.currentPiece.foreach(next => println(s"Next color is $next\n"))
+    game.nextGameTile.foreach(next => println(s"Next color is $next\n"))
     Thread.sleep(1000)
     game.playRandomMove()
   }

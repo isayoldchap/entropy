@@ -34,7 +34,7 @@ class EntropyGameSpec extends FunSpec with Matchers {
       val entropyGame = EntropyGame(EntropyStyle.Normal)
       (1 to 25).foreach { turn =>
         entropyGame.gameOver shouldBe false
-        entropyGame.currentPiece.foreach { piece =>
+        entropyGame.nextGameTile.foreach { piece =>
           val possibleChaosMoves = entropyGame.legalChaosMoves
           possibleChaosMoves.size > 0 shouldBe true
 
