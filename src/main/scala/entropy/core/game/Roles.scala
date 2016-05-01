@@ -7,7 +7,7 @@ import com.sjr.entropy.core._
  */
 
 sealed trait Role {
-  def randomMove(game: EntropyGame): EntropyMove
+  def randomMove(game: EntropyGame): Op[EntropyMove]
 
   def playMove(game: EntropyGame, move: EntropyMove): MoveResult = {
     if (move.isValidForRole(this)) move.play(game)
@@ -19,14 +19,14 @@ sealed trait Role {
 
 object Order extends Role {
 
-  override def randomMove(game: EntropyGame): EntropyMove = game.randomOrderMove
+  override def randomMove(game: EntropyGame): Op[EntropyMove] = game.randomOrderMove
 
   override def alternate: Role = Chaos
 }
 
 object Chaos extends Role {
 
-  override def randomMove(game: EntropyGame): EntropyMove = game.randomChaosMove
+  override def randomMove(game: EntropyGame): Op[EntropyMove] = game.randomChaosMove
 
   override def alternate: Role = Order
 }

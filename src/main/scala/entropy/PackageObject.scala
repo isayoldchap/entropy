@@ -35,10 +35,9 @@ trait PackageObject {
 
   case class IllegalMoveResult(description: String) extends MoveResult
 
-
-
   import com.sjr.entropy.core.GameTile._
 
-  val TilesForNormalGame: Set[GameTile] = Set(RedTile, GreenTile, OrangeTile, BlueTile, WhiteTile)
+  val TilesForTinyGame: Set[GameTile] = Set(RedTile, GreenTile, OrangeTile)
+  val TilesForNormalGame: Set[GameTile] = TilesForTinyGame ++ Set(BlueTile, WhiteTile)
   val TilesForLargeGame: Set[GameTile]  = TilesForNormalGame ++ Set(SilverTile, YellowTile)
 }

@@ -1,6 +1,7 @@
 package com.sjr.entropy.core.game
 
 import com.sjr.entropy.core._
+import entropy.core.CoordinateUtils
 
 /**
  * Created by stevenrichardson on 4/4/14.
@@ -11,8 +12,13 @@ object EntropyBoard {
 }
 
 class EntropyBoard(private val grid: Grid[GameTile]) {
+  def columns: Int = grid.cols
+
+  def rows: Int = grid.rows
 
   type EntropySegment = Seq[Op[GameTile]]
+
+  def header: String = CoordinateUtils.makeHeaderString(this)
 
   def clear() = grid.clear()
 

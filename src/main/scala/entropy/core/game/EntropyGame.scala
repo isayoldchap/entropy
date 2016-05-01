@@ -9,6 +9,7 @@ import com.sjr.entropy.core._
 import scala.util.Random
 
 object EntropyStyle extends Enumeration {
+  val Tiny = Value(3, "Tiny")
   val Normal = Value(5, "Normal")
   val Large = Value(7, "Large")
 }
@@ -19,22 +20,22 @@ object EntropyGame extends App {
   def apply(gameStyle: EntropyStyle.Value): EntropyGame = gameStyle match {
     case EntropyStyle.Normal => new EntropyGame(TilesForNormalGame)
     case EntropyStyle.Large => new EntropyGame(TilesForLargeGame)
+    case EntropyStyle.Tiny => new EntropyGame(TilesForTinyGame)
   }
 }
 
 class EntropyGame(uniqueGameTiles: Set[GameTile]) {
-  assert(uniqueGameTiles.size > 3)
-
-  val random = new Random
-  val board = EntropyBoard(uniqueGameTiles.size)
-  val bag = setupBag(uniqueGameTiles)
+  assert(uniqueGameTiles.size > 2)
 
   private var currentRole: Role = Chaos
+  private val board = EntropyBoard(uniqueGameTiles.size)
+  private val bag = setupBag(uniqueGameTiles)
   private var nextTile: Option[GameTile] = bag.takeNext()
+  private val random = new Random
 
   def reset() = {
     bag.clear()
-    (1 to uniqueGameTiles.size).foreach(x => {uniqueGameTiles.foreach(bag.add)})
+    (1 to uniqueGameTiles.size).foreach(x => uniqueGameTiles.foreach(bag.add))
     bag.shuffle()
     board.clear()
     drawNextTile()
@@ -43,19 +44,26 @@ class EntropyGame(uniqueGameTiles: Set[GameTile]) {
 
   def score: Int = new EntropyScorer().score(board)
 
-  def nextGameTile:Option[GameTile] = nextTile
+  def nextGameTile: Option[GameTile] = nextTile
 
   def isFull: Boolean = board.isFull
 
   def isEmpty: Boolean = board.isEmpty
 
-  def playRandomMove(): MoveResult = playMove(randomMove)
+  def playRandomMove(): MoveResult = randomMove.map(playMove).getOrElse(IllegalMoveResult(""))
 
-  def randomMove: EntropyMove = currentRole.randomMove(this)
+  def randomMove: Op[EntropyMove] = currentRole.randomMove(this)
 
-  def randomOrderMove: OrderMove = legalOrderMoves(random.nextInt(legalOrderMoves.size))
+  def randomOrderMove: Op[OrderMove] = {
+    val allOrderMoves = legalOrderMoves
+    if (allOrderMoves.nonEmpty) Some(legalOrderMoves(random.nextInt(legalOrderMoves.size))) else None
+  }
 
-  def randomChaosMove: ChaosMove = ChaosMove(legalChaosMoves(random.nextInt(legalChaosMoves.size)))
+  def randomChaosMove: Op[ChaosMove] = {
+    val allChaosMoves = legalChaosMoves
+    if (allChaosMoves.nonEmpty) Some(ChaosMove(legalChaosMoves(random.nextInt(legalChaosMoves.size))))
+    else None
+  }
 
   def legalOrderMoves: Seq[OrderMove] = if (currentRole == Order) board.allPossibleOrderMoves else Seq.empty
 
@@ -64,7 +72,7 @@ class EntropyGame(uniqueGameTiles: Set[GameTile]) {
   def gameOver: Boolean = board.isFull
 
   def displayBoard: Unit = {
-    println("ABCDE")
+    println(board.header)
     println(board.toString)
   }
 
@@ -100,9 +108,7 @@ class EntropyGame(uniqueGameTiles: Set[GameTile]) {
 
   private def setupBag(uniqueGameTiles: Set[GameTile]): Bag[GameTile] = {
     val bag = Bag[GameTile]()
-    (1 to uniqueGameTiles.size).foreach(x => {
-      uniqueGameTiles.foreach(bag.add)
-    })
+    (1 to uniqueGameTiles.size).foreach(_ => uniqueGameTiles.foreach(bag.add))
     bag.shuffle()
   }
 }
