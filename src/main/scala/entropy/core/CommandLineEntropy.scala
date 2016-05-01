@@ -5,6 +5,7 @@ import com.sjr.entropy.core.game._
 /**
  * Created by stevenrichardson on 1/24/15.
  */
+
 object CommandLineEntropy extends App {
   val letterMappings = Seq("A","B","C","D","E", "F", "G").zipWithIndex.map{
     case (letter, index) => (letter, index + 1)
@@ -18,28 +19,14 @@ object CommandLineEntropy extends App {
   game.displayBoard
 
   for (command <- io.Source.stdin.getLines) {
-    command.toUpperCase match {
-      case "PASS" =>
-        game.playMove(PassMove)  match {
-          case ValidMoveResult =>
-            doComputerTurn()
-          case IllegalMoveResult(x) =>
-            println("Attempted Move was illegal")
-        }
-      case ChaosMoveRegex(x, y) =>
-        println(s"Chaos move was $x$y")
-        game.playMove(ChaosMove(makePoint(x,y)))
-      case OrderMoveRegex(x1, y1, x2, y2) =>
-        println(s"Order move was $x1$y1-$x2$y2")
-        game.playMove(OrderMove(makePoint(x1,y1),makePoint(x2,y2))) match {
-          case ValidMoveResult =>
-            doComputerTurn()
-          case IllegalMoveResult(x) =>
-            println("Attempted Move was illegal")
-        }
-
-      case _ => println("Unrecognized command")
+    commandToMove(command) match {
+      case Some(move) => makeMove(move) match {
+        case ValidMoveResult =>  doComputerTurn()
+        case IllegalMoveResult(reason) => println(s"Attempted Move $move was illegal")
+      }
+      case None => println(s"Invalid command $command")
     }
+
     game.displayBoard
     if ( game.gameOver) {
       println(s"Score was ${game.score}")
@@ -47,13 +34,22 @@ object CommandLineEntropy extends App {
     }
   }
 
-  def doComputerTurn() {
+  private def makeMove(move: EntropyMove): MoveResult = game.playMove(move)
+
+  private def commandToMove(command: String): Op[EntropyMove] =
+    command.toUpperCase match {
+      case "PASS" => Some(PassMove)
+      case ChaosMoveRegex(x, y) => Some(ChaosMove(makePoint(x,y)))
+      case OrderMoveRegex(x1, y1, x2, y2) => Some(OrderMove(makePoint(x1,y1),makePoint(x2,y2)))
+      case _ => None
+    }
+
+  private def doComputerTurn() {
     game.displayBoard
-    println("Next color is " + game.currentPiece.get)
+    game.currentPiece.foreach(next => println(s"Next color is $next\n"))
     Thread.sleep(1000)
     game.playMove(game.randomLegalChaosMove)
   }
 
-  def makePoint(x:String, y:String): Point = Point(letterMappings(x), y.toInt)
-
+  private def makePoint(x:String, y:String): Point = Point(letterMappings(x), y.toInt)
 }
