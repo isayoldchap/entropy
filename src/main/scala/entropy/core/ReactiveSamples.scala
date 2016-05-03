@@ -14,6 +14,8 @@ object ReactiveSamples extends App {
 
   Observable.interval(1 second).groupBy(x => println(x))
 
+
+
 //  Observable.just(1, 2, 3, 4).subscribe(
 //    id => println(s"Just $id")
 //  )
