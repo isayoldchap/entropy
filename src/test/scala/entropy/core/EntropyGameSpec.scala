@@ -1,6 +1,6 @@
 package com.sjr.entropy.core
 
-import com.sjr.entropy.core.game.{ChaosMove, OrderMove, EntropyGame, EntropyStyle}
+import com.sjr.entropy.core.game._
 import org.scalatest.{FunSpec, Matchers}
 
 import scala.util.Random

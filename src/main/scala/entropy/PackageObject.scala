@@ -25,16 +25,10 @@ trait PackageObject {
 
   type Fu[T] = Future[T]
 
-//  type Move = (Point, Point) //from, to
-
   implicit def extendedString(s: String) = new StringExt(s)
   implicit def extendedBoolean(b: Boolean) = new BooleanExt(b)
 
-  sealed trait MoveResult
 
-  object ValidMoveResult extends MoveResult
-
-  case class IllegalMoveResult(description: String) extends MoveResult
 
   import com.sjr.entropy.core.GameTile._
 

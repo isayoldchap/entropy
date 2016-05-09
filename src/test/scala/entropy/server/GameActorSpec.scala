@@ -3,7 +3,7 @@ package com.sjr.entropy.server
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestKit}
 import com.sjr.entropy.core._
-import com.sjr.entropy.core.game.{ChaosMove, OrderMove}
+import com.sjr.entropy.core.game._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 /**

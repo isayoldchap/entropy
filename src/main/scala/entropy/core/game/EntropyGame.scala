@@ -5,7 +5,6 @@ package com.sjr.entropy.core.game
  */
 
 import com.sjr.entropy.core._
-
 import scala.util.Random
 
 object EntropyStyle extends Enumeration {
@@ -18,9 +17,9 @@ object EntropyGame extends App {
   def apply(tiles: Set[GameTile]): EntropyGame = new EntropyGame(tiles)
 
   def apply(gameStyle: EntropyStyle.Value): EntropyGame = gameStyle match {
+    case EntropyStyle.Tiny => new EntropyGame(TilesForTinyGame)
     case EntropyStyle.Normal => new EntropyGame(TilesForNormalGame)
     case EntropyStyle.Large => new EntropyGame(TilesForLargeGame)
-    case EntropyStyle.Tiny => new EntropyGame(TilesForTinyGame)
   }
 }
 
@@ -32,6 +31,10 @@ class EntropyGame(uniqueGameTiles: Set[GameTile]) {
   private val bag = setupBag(uniqueGameTiles)
   private var nextTile: Option[GameTile] = bag.takeNext()
   private val random = new Random
+
+  def rows: Int = board.rows
+
+  def cols: Int = board.columns
 
   def reset() = {
     bag.clear()
@@ -89,7 +92,7 @@ class EntropyGame(uniqueGameTiles: Set[GameTile]) {
       drawNextTile()
       switchRole()
       ValidMoveResult
-    } else IllegalMoveResult(s"Order Move ${orderMove} was invalid")
+    } else IllegalMoveResult(s"Order Move $orderMove was invalid")
   }
 
   private[game] def playChaosMove(chaosMove: ChaosMove): MoveResult = {
@@ -98,7 +101,7 @@ class EntropyGame(uniqueGameTiles: Set[GameTile]) {
       nextTile = None
       switchRole()
       ValidMoveResult
-    } else IllegalMoveResult(s"Chaos Move ${chaosMove} was invalid")
+    } else IllegalMoveResult(s"Chaos Move $chaosMove was invalid")
   }
 
   private def drawNextTile(): Unit = nextTile = bag.takeNext()
